@@ -3,22 +3,23 @@ package typingTutor;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class WordMover extends Thread {
-	public FallingWord myWord;
+public class HungryWordMover extends Thread{
+
+    //private FallingWord myWord;
 	private HungryWord hungWord;
 	private AtomicBoolean done;
 	private AtomicBoolean pause; 
 	private Score score;
 	CountDownLatch startLatch; //so all can start at once
 	
-	WordMover( FallingWord word) {
-		myWord = word;
+	HungryWordMover( HungryWord word) {
+		hungWord = word;
 	}
 	/*WordMover( HungryWordMover word) {
 		hungWord = word;
 	}*/
 	
-	WordMover( FallingWord word,WordDictionary dict, Score score,
+	HungryWordMover( HungryWord word,WordDictionary dict, Score score,
 			CountDownLatch startLatch, AtomicBoolean d, AtomicBoolean p) {
 		this(word);
 		this.startLatch = startLatch;
@@ -40,32 +41,35 @@ public class WordMover extends Thread {
 	public void run() {
 		//h
 	//System.out.println(myWord.getWord() + " falling speed = " + myWord.getSpeed());
-		try {
-			System.out.println(myWord.getWord() + " waiting to start " );
+        //WordMover m = new WordMover(word)
+        		try {
+			System.out.println(hungWord.getWord() + " waiting to start " );
 			startLatch.await();
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} //wait for other threads to start
-		System.out.println(myWord.getWord() + " started" );
+		System.out.println(hungWord.getWord() + " started" );
 		while (!done.get()) {				
 			//animate the word
-			while (!myWord.dropped() && !done.get()) {
-				    myWord.drop(10);
+			while (!hungWord.dropped() && !done.get()) {
+				    hungWord.drop(10);
 					try {
-						sleep(myWord.getSpeed());
+						sleep(hungWord.getSpeed());
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					};		
 					while(pause.get()&&!done.get()) {};
 			}
-			if (!done.get() && myWord.dropped()) {
+			if (!done.get() && hungWord.dropped()) {
 				score.missedWord();
-				myWord.resetWord();
+				hungWord.resetWord();
 			}
-			myWord.resetWord();
-		}
+            //if(hungWord.getY() == WordMover.myWord.getY())
+			//hungWord.resetWord();
+		//}
 	}
 	
+}
 }

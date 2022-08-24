@@ -16,14 +16,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TypingTutorApp {
 //shared class variables
+	static int noHungWords=1;
 	static int noWords=4;
 	static int totalWords;
 
    	static int frameX=1000;
 	static int frameY=600;
 	static int yLimit=480;
+	static int xLimit=900;
 
 	static WordDictionary dict = new WordDictionary(); //use default dictionary, to read from file eventually
+	static WordDictionary Hdict = new WordDictionary();
+
+	static HungryWord[] hungryWords;
+	static HungryWordMover[] hungryShft;
 
 	static FallingWord[] words;
 	static WordMover[] wrdShft;
@@ -50,7 +56,7 @@ public class TypingTutorApp {
         g.setLayout(new BoxLayout(g, BoxLayout.PAGE_AXIS)); 
       	g.setSize(frameX,frameY);
  
-		gameWindow = new GamePanel(words,yLimit,done,started,won);
+		gameWindow = new GamePanel(words,hungryWords,yLimit,done,started,won);
 		gameWindow.setSize(frameX,yLimit+100);
 	    g.add(gameWindow);
 	    
@@ -197,6 +203,19 @@ public class TypingTutorApp {
      		wrdShft[i] .start();
 			
      	}
+
+		for (int i=0;i<noWords;i++) {
+			hungryWords[i]=new HungryWord(dict.getNewWord(),0/*gameWindow.getValidXpos()*/,xLimit);
+		}
+		//create threads to move them
+	    for (int i=0;i<1;i++) {
+	    	hungryShft[i] = new HungryWordMover(hungryWords[i],dict,score,startLatch,done,pause);
+	    }
+        //word movers waiting on starting line
+     	for (int i=0;i<1;i++) {
+     		hungryShft[i] .start();
+			
+     	}
 	}
 	
 public static String[] getDictFromFile(String filename) {
@@ -242,11 +261,15 @@ public static void main(String[] args) {
 		}
 				
 		FallingWord.dict=dict; //set the class dictionary for the words.
+		HungryWord.dict=dict;
 		
 		words = new FallingWord[noWords];  //array for the  current chosen words from dict
+		hungryWords = new HungryWord[noWords];
 		wrdShft = new WordMover[noWords]; //array for the threads that animate the words
-		
+		hungryShft = new HungryWordMover[noWords];
+
 		CatchWord.setWords(words);  //class setter - static method
+		CatchWord.setHungryWords(hungryWords);
 		CatchWord.setScore(score);  //class setter - static method
 		CatchWord.setFlags(done,pause); //class setter - static method
 

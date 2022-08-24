@@ -14,12 +14,14 @@ public class GamePanel extends JPanel implements Runnable {
 		private AtomicBoolean won ; //REMOVE
 
 		private FallingWord[] words;
+		private HungryWord[] hungrywords;
 		private int noWords;
 		private final static int borderWidth=25; //appearance - border
 
-		GamePanel(FallingWord[] words, int maxY,	
+		GamePanel(FallingWord[] words,HungryWord[] hungryWords, int maxY,	
 				 AtomicBoolean d, AtomicBoolean s, AtomicBoolean w) {
 			this.words=words; //shared word list
+			this.hungrywords=hungryWords;
 			noWords = words.length; //only need to do this once
 			done=d; //REMOVE
 			started=s; //REMOVE
@@ -43,7 +45,16 @@ public class GamePanel extends JPanel implements Runnable {
 		    }
 		    else if (!done.get()) {
 		    	for (int i=0;i<noWords;i++){	    	
-		    		g.drawString(words[i].getWord(),words[i].getX()+borderWidth,words[i].getY());	
+		    		g.drawString(words[i].getWord(),words[i].getX()+borderWidth,words[i].getY());
+					
+					//g.drawString(hungrywords[0].getWord(),hungrywords[0].getX()+borderWidth,hungrywords[0].getY());
+					//g.setColor(Color.green);
+		    	}
+				for (int i=0;i<noWords;i++){	    	
+		    		//g.drawString(words[i].getWord(),words[i].getX()+borderWidth,words[i].getY());
+					
+					g.drawString(hungrywords[0].getWord(),hungrywords[0].getX()+borderWidth,hungrywords[0].getY());
+					g.setColor(Color.green);
 		    	}
 		    	g.setColor(Color.lightGray); //change colour of pen
 		    	g.fillRect(borderWidth,0,width,borderWidth);
