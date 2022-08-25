@@ -52,7 +52,15 @@ public class GamePanel extends JPanel implements Runnable {
 		    	}
 				for (int i=0;i<noWords;i++){	    	
 		    		//g.drawString(words[i].getWord(),words[i].getX()+borderWidth,words[i].getY());
-					
+					/*try {
+						Thread.sleep((long)(Math.random()*10000));
+						System.out.println("Waited");
+			
+					} catch (InterruptedException e2) {
+						// TODO Auto-generated catch block
+						//e2.printStackTrace();
+						System.out.println("not Waited");
+					}*/
 					g.drawString(hungrywords[0].getWord(),hungrywords[0].getX()+borderWidth,hungrywords[0].getY());
 					g.setColor(Color.green);
 		    	}
