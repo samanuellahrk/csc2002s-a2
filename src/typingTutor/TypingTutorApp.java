@@ -208,8 +208,8 @@ public class TypingTutorApp {
 			hungryWords[i]=new HungryWord(dict.getNewWord(),0/*gameWindow.getValidXpos()*/,xLimit);
 		}
 		//create threads to move them
-	    for (int i=0;i<1;i++) {
-	    	hungryShft[i] = new HungryWordMover(hungryWords[i],dict,score,startLatch,done,pause);
+	    for (int i=0;i<noWords;i++) {
+	    	hungryShft[i] = new HungryWordMover(hungryWords[i],words[i],dict,score,startLatch,done,pause);
 	    }
         //word movers waiting on starting line
      	for (int i=0;i<1;i++) {
